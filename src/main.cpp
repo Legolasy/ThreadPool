@@ -34,10 +34,12 @@ int main(int argc, char *argv[])
         Result rs2 = pool.submit(make_shared<MyTask>(10000001,20000000));
         auto rs3 = pool.submit(make_shared<MyTask>(10000001,20000000));
         auto rs4 = pool.submit(make_shared<MyTask>(10000001,20000000));
-        uLong s1=rs1.get().cast_<uLong>();
-        uLong s2=rs2.get().cast_<uLong>();
-        uLong s3=rs3.get().cast_<uLong>();
-        uLong s4=rs4.get().cast_<uLong>();
+        pool.submit(make_shared<MyTask>(10000001,20000000));
+        pool.submit(make_shared<MyTask>(10000001,20000000));
+        // uLong s1=rs1.get().cast_<uLong>();
+        // uLong s2=rs2.get().cast_<uLong>();
+        // uLong s3=rs3.get().cast_<uLong>();
+        // uLong s4=rs4.get().cast_<uLong>();
         // uLong s2=rs2.get().cast_<uLong>();
         // cout<<s1;
     }

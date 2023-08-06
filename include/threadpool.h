@@ -57,17 +57,20 @@ class Semaphore
 public:
     Semaphore(int limit = 0)
         :resLimit_(limit)
+        ,isExited_(false)
         {}
     //~Semaphore() = default;
     ~Semaphore()
     {
-        mtx_.unlock();
-        mtx_.~mutex();
-        cv_.~condition_variable();
+        isExited_ = true;
+        // mtx_.unlock();
+        // mtx_.~mutex();
+        // cv_.~condition_variable();
     }
     //消耗一个资源
     void wait()
     {
+        if(isExited_)return;
         //上锁
         std::unique_lock<std::mutex>lock(mtx_);
         //资源为0 阻塞
@@ -80,6 +83,7 @@ public:
     //生产一个资源
     void post()
     {
+        if(isExited_)return;
         //上锁
         std::unique_lock<std::mutex>lock(mtx_);
         //生产资源
@@ -88,7 +92,8 @@ public:
         cv_.notify_all();
     }
 private:
-    
+
+    std::atomic_bool isExited_; // 判断当前semaphore是否析构
     std::condition_variable cv_;
     int resLimit_;
     std::mutex mtx_;
